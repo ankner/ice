@@ -50,7 +50,7 @@ public class VisitEditor extends EditorPart {
 	public static final String ID = "org.eclipse.ice.viz.visit.VisitEditor";
 
 	/**
-	 * 
+	 * The connection to the VisIt client.
 	 */
 	VisItSwtConnection vizConnection;
 
@@ -74,6 +74,12 @@ public class VisitEditor extends EditorPart {
 	 * being pressed.
 	 */
 	private boolean mousePressed;
+
+	/**
+	 * The factory for creating and opening the command line interface for
+	 * interacting with the VisIt server.
+	 */
+	private VisitPythonConsoleFactory consoleFactory;
 
 	/**
 	 * The constructor
@@ -254,6 +260,10 @@ public class VisitEditor extends EditorPart {
 
 					vizWidget.setVisItSwtConnection(conn, windowId,
 							windowWidth, windowHeight);
+
+					// Create the Python interface
+					consoleFactory = new VisitPythonConsoleFactory();
+					consoleFactory.openConsole();
 				} catch (Exception e) {
 					MessageDialog.openError(parent.getShell(),
 							"Failed to Set VisIt Connection", e.getMessage());

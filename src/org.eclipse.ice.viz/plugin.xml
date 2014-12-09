@@ -117,7 +117,7 @@
          <view
                closeable="true"
                id="org.eclipse.ice.viz.plotviewer.CSVDataTableViewer"
-               ratio="0.75f"
+               ratio="0.77f"
                relationship="bottom"
                relative="org.eclipse.ui.console.ConsoleView"
                visible="false">

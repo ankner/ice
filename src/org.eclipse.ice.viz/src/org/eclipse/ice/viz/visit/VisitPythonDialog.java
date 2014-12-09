@@ -93,7 +93,7 @@ public class VisitPythonDialog extends TitleAreaDialog {
 		super(parentShell);
 
 		// Remove the help button
-		super.setHelpAvailable(false);
+		setHelpAvailable(false);
 
 		// Get the active VisIt widget
 		widget = inWidget;
