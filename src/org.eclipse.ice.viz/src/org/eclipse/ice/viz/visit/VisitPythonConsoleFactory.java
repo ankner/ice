@@ -1,10 +1,14 @@
 package org.eclipse.ice.viz.visit;
 
+import java.io.IOException;
+import java.util.List;
+
 import gov.lbnl.visit.swt.VisItSwtWidget;
 
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentListener;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
@@ -13,6 +17,10 @@ import org.eclipse.ui.console.IConsole;
 import org.eclipse.ui.console.IConsoleConstants;
 import org.eclipse.ui.console.IConsoleFactory;
 import org.eclipse.ui.console.IConsoleView;
+import org.eclipse.ui.console.IOConsoleOutputStream;
+
+import visit.java.client.AttributeSubject;
+import visit.java.client.AttributeSubject.AttributeSubjectCallback;
 
 /**
  * @author Taylor Patterson
@@ -25,6 +33,16 @@ public class VisitPythonConsoleFactory implements IConsoleFactory {
 	 * created.
 	 */
 	private VisItSwtWidget visitWidget;
+
+	/**
+	 * The {@link VisitPythonConsole} instance created by this factory.
+	 */
+	private VisitPythonConsole console;
+
+	/**
+	 * The {@link AttributeSubjectCallback} used by the VisIt widget.
+	 */
+	private AttributeSubjectCallback attSubCallback;
 
 	/**
 	 * The constructor
@@ -54,28 +72,14 @@ public class VisitPythonConsoleFactory implements IConsoleFactory {
 					.showView(IConsoleConstants.ID_CONSOLE_VIEW);
 			// Create the console instance that will provide the Python
 			// interface for VisIt
-			final VisitPythonConsole console = new VisitPythonConsole(
-					"VisIt Python Interface", null, visitWidget);
+			console = new VisitPythonConsole("VisIt Python Interface", null,
+					visitWidget);
 
 			// Create the listener for text entered into the console
-			IDocument document = console.getDocument();
-			document.addDocumentListener(new IDocumentListener() {
+			createInputListener();
 
-				@Override
-				public void documentChanged(DocumentEvent event) {
-					// Detect the enter key
-					// TODO Check cross-platform compatibility
-					if ("\n".equals(event.getText())) {
-						// Process the user's entry
-						console.executeCommand();
-					}
-				}
-
-				@Override
-				public void documentAboutToBeChanged(DocumentEvent event) {
-					// Do nothing for now.
-				}
-			});
+			// Create the output stream for information returned by VisIt
+			createOutputStream();
 
 			// Add the console to the console manager
 			ConsolePlugin.getDefault().getConsoleManager()
@@ -88,6 +92,94 @@ public class VisitPythonConsoleFactory implements IConsoleFactory {
 					+ "initialize the Python interface");
 			e.printStackTrace();
 		}
+
 	}
 
+	/**
+	 * Create the listener to process the commands entered by the user when the
+	 * 'Enter' key is pressed in the console.
+	 */
+	private void createInputListener() {
+
+		IDocument document = console.getDocument();
+		document.addDocumentListener(new IDocumentListener() {
+
+			@Override
+			public void documentChanged(DocumentEvent event) {
+				// Detect the enter key
+				// TODO Check cross-platform compatibility
+				if ("\n".equals(event.getText())) {
+					// Process the user's entry
+					console.executeCommand();
+				}
+			}
+
+			@Override
+			public void documentAboutToBeChanged(DocumentEvent event) {
+				// Do nothing for now.
+			}
+		});
+
+	}
+
+	/**
+	 * Create the output stream to print information returned by VisIt to the
+	 * console.
+	 */
+	private void createOutputStream() {
+
+		// Create the AttributeSubjectCallback
+		attSubCallback = new AttributeSubjectCallback() {
+
+			@Override
+			public boolean update(AttributeSubject subject) {
+				// Get the callback contents
+				String name = subject.getAsString("methodName");
+
+				// Make sure it is something we want
+				if (!"AcceptRecordedMacro".equals(name)) {
+					return false;
+				}
+
+				// Initiate an output stream to write callback contents to the
+				// console
+				final IOConsoleOutputStream outStream = console
+						.newOutputStream();
+				outStream.setActivateOnWrite(true);
+
+				// Get the String from VisIt
+				final List<String> vec = subject
+						.getAsStringVector("stringArgs");
+
+				// Sync with the display and print the String to the console
+				Display.getDefault().asyncExec(new Runnable() {
+					public void run() {
+						for (int i = 0; i < vec.size(); ++i) {
+							try {
+								outStream.write(vec.get(i) + "\n");
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+					}
+				});
+
+//				// Close the output stream
+//				try {
+//					outStream.close();
+//				} catch (IOException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+
+				return true;
+			}
+		};
+
+		// Register the AttributeSubjectCallback with the VisIt widget
+		visitWidget.getViewerState().registerCallback("ClientMethod",
+				attSubCallback);
+
+	}
 }
