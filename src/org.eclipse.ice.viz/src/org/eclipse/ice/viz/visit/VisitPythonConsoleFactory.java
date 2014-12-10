@@ -1,5 +1,7 @@
 package org.eclipse.ice.viz.visit;
 
+import gov.lbnl.visit.swt.VisItSwtWidget;
+
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentListener;
@@ -19,7 +21,24 @@ import org.eclipse.ui.console.IConsoleView;
 public class VisitPythonConsoleFactory implements IConsoleFactory {
 
 	/**
-	 * (non-Javadoc)
+	 * The {@link VisItSwtWidget} for which a {@link VisitPythonConsole} will be
+	 * created.
+	 */
+	private VisItSwtWidget visitWidget;
+
+	/**
+	 * The constructor
+	 * 
+	 * @param vizWidget
+	 *            The {@link VisItSwtWidget} for which a
+	 *            {@link VisitPythonConsole} will be created.
+	 */
+	public VisitPythonConsoleFactory(VisItSwtWidget vizWidget) {
+		visitWidget = vizWidget;
+	}
+
+	/**
+	 * Creates a new {@link VisitPythonConsole} in the console view.
 	 * 
 	 * @see org.eclipse.ui.console.IConsoleFactory#openConsole()
 	 */
@@ -36,7 +55,7 @@ public class VisitPythonConsoleFactory implements IConsoleFactory {
 			// Create the console instance that will provide the Python
 			// interface for VisIt
 			final VisitPythonConsole console = new VisitPythonConsole(
-					"VisIt Python Interface", null);
+					"VisIt Python Interface", null, visitWidget);
 
 			// Create the listener for text entered into the console
 			IDocument document = console.getDocument();

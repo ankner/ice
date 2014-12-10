@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.ice.viz.visit;
 
+import gov.lbnl.visit.swt.VisItSwtWidget;
+
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.console.IOConsole;
 
@@ -22,6 +24,11 @@ import org.eclipse.ui.console.IOConsole;
 public class VisitPythonConsole extends IOConsole {
 
 	/**
+	 * The {@link VisItSwtWidget} for which this console provides an interface.
+	 */
+	private VisItSwtWidget visitWidget;
+
+	/**
 	 * The constructor
 	 * 
 	 * @see IOConsole(String, ImageDescriptor)
@@ -30,9 +37,16 @@ public class VisitPythonConsole extends IOConsole {
 	 *            The name to display for this console
 	 * @param imageDescriptor
 	 *            The image to display for this console or <code>null</code>
+	 * @param visitWidget
+	 *            The {@link VisItSwtWidget} for which this console provides an
+	 *            interface.
 	 */
-	public VisitPythonConsole(String name, ImageDescriptor imageDescriptor) {
+	public VisitPythonConsole(String name, ImageDescriptor imageDescriptor,
+			VisItSwtWidget vizWidget) {
+		// Call the parent constructor
 		super(name, imageDescriptor);
+		// Set the VisIt widget
+		visitWidget = vizWidget;
 	}
 
 	/**
@@ -42,14 +56,14 @@ public class VisitPythonConsole extends IOConsole {
 	 */
 	protected void executeCommand() {
 
-		// // Get the last command from the console Text
-		// String command = console.getText().trim();
-		// int start = Math.max(0, command.lastIndexOf("\n"));
-		// command = command.substring(start);
-		// // Call the VisIt widget method to process the command(s)
-		// if (!command.isEmpty()) {
-		// widget.getViewerMethods().processCommands(command);
-		// }
+		// Get the last command from the console Text
+		String command = getDocument().get().trim();
+		int start = Math.max(0, command.lastIndexOf("\n"));
+		command = command.substring(start);
+		// Call the VisIt widget method to process the command(s)
+		if (!command.isEmpty()) {
+			visitWidget.getViewerMethods().processCommands(command);
+		}
 
 		return;
 	}

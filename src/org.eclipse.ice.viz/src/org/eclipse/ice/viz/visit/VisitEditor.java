@@ -262,7 +262,7 @@ public class VisitEditor extends EditorPart {
 							windowWidth, windowHeight);
 
 					// Create the Python interface
-					consoleFactory = new VisitPythonConsoleFactory();
+					consoleFactory = new VisitPythonConsoleFactory(vizWidget);
 					consoleFactory.openConsole();
 				} catch (Exception e) {
 					MessageDialog.openError(parent.getShell(),
