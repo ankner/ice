@@ -141,37 +141,33 @@ public class VisitPythonConsoleFactory implements IConsoleFactory {
 					return false;
 				}
 
-				// Initiate an output stream to write callback contents to the
-				// console
-				final IOConsoleOutputStream outStream = console
-						.newOutputStream();
-				outStream.setActivateOnWrite(true);
-
 				// Get the String from VisIt
 				final List<String> vec = subject
 						.getAsStringVector("stringArgs");
 
 				// Sync with the display and print the String to the console
 				Display.getDefault().asyncExec(new Runnable() {
+					@Override
 					public void run() {
-						for (int i = 0; i < vec.size(); ++i) {
-							try {
+						try {
+							// Initiate an output stream to write callback
+							// contents to the console
+							IOConsoleOutputStream outStream = console
+									.newOutputStream();
+							outStream.setActivateOnWrite(true);
+							// Write the Strings from VisIt to the console
+							for (int i = 0; i < vec.size(); ++i) {
 								outStream.write(vec.get(i) + "\n");
-							} catch (IOException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
 							}
+							// Close the output stream we are done using
+							outStream.close();
+						} catch (IOException e) {
+							System.out.println("VisitPythonConsoleFactory "
+									+ "Message: IOConsoleOutputStream error.");
+							e.printStackTrace();
 						}
 					}
 				});
-
-//				// Close the output stream
-//				try {
-//					outStream.close();
-//				} catch (IOException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
 
 				return true;
 			}
