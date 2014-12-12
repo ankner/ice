@@ -74,6 +74,7 @@ public class VisitPythonConsoleFactory implements IConsoleFactory {
 			// interface for VisIt
 			console = new VisitPythonConsole("VisIt Python Interface", null,
 					visitWidget);
+			console.createPage(consoleView);
 
 			// Create the listener for text entered into the console
 			createInputListener();

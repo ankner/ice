@@ -15,7 +15,10 @@ package org.eclipse.ice.viz.visit;
 import gov.lbnl.visit.swt.VisItSwtWidget;
 
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.ui.console.IConsole;
+import org.eclipse.ui.console.IConsoleView;
 import org.eclipse.ui.console.IOConsole;
+import org.eclipse.ui.part.IPageBookViewPage;
 
 /**
  * @author Taylor Patterson
@@ -47,6 +50,14 @@ public class VisitPythonConsole extends IOConsole {
 		super(name, imageDescriptor);
 		// Set the VisIt widget
 		visitWidget = vizWidget;
+	}
+
+	/**
+	 * @see IConsole#createPage(IConsoleView)
+	 */
+	@Override
+	public IPageBookViewPage createPage(IConsoleView view) {
+		return new VisitPythonConsolePage(this, view);
 	}
 
 	/**
