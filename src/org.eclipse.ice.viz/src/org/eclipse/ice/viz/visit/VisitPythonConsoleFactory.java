@@ -151,6 +151,8 @@ public class VisitPythonConsoleFactory implements IConsoleFactory {
 					@Override
 					public void run() {
 						try {
+							// Prepare for output
+							console.setIsInput(false);
 							// Initiate an output stream to write callback
 							// contents to the console
 							IOConsoleOutputStream outStream = console
@@ -162,6 +164,8 @@ public class VisitPythonConsoleFactory implements IConsoleFactory {
 							}
 							// Close the output stream we are done using
 							outStream.close();
+							// Prepare for input
+							console.setIsInput(true);
 						} catch (IOException e) {
 							System.out.println("VisitPythonConsoleFactory "
 									+ "Message: IOConsoleOutputStream error.");

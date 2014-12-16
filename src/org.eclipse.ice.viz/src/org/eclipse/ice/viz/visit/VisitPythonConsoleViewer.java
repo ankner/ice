@@ -20,6 +20,7 @@ import org.eclipse.swt.custom.PaintObjectListener;
 import org.eclipse.swt.custom.ST;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.graphics.GlyphMetrics;
 import org.eclipse.swt.graphics.TextLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -40,7 +41,7 @@ public class VisitPythonConsoleViewer extends TextConsoleViewer {
 	 * @param console
 	 *            The {@link TextConsole} contained in this viewer
 	 */
-	public VisitPythonConsoleViewer(Composite parent, TextConsole console) {
+	public VisitPythonConsoleViewer(Composite parent, final TextConsole console) {
 		super(parent, console);
 
 		final StyledText text = getTextWidget();
@@ -54,7 +55,7 @@ public class VisitPythonConsoleViewer extends TextConsoleViewer {
 				// Get the line where '>>>' should be placed
 				event.bulletIndex = text.getLineAtOffset(event.lineOffset);
 
-				// Create the StyleRange to reserve space for the preceeding
+				// Create the StyleRange to reserve space for the preceding
 				// '>>> '
 				StyleRange styleRange = new StyleRange();
 				styleRange.metrics = new GlyphMetrics(0, 0,
@@ -65,24 +66,26 @@ public class VisitPythonConsoleViewer extends TextConsoleViewer {
 			}
 		});
 
-		// Actually generate the preceeding '>>> '
+		// Actually generate the preceding '>>> '
 		text.addPaintObjectListener(new PaintObjectListener() {
 
 			@Override
 			public void paintObject(PaintObjectEvent event) {
-				// Define the TextLayout parameters
-				TextLayout textLayout = new TextLayout(event.display);
-				textLayout.setAscent(event.ascent);
-				textLayout.setDescent(event.descent);
-				textLayout.setFont(event.style.font);
-				// Create the String (">>> ") at the beginning of each input
-				// line
-				textLayout.setText(">>> ");
-				// Draw the text
-				textLayout.draw(event.gc, event.x, event.y);
-				textLayout.dispose();
+				// Only print if this is an input line
+				if (((VisitPythonConsole) console).isInput()) {
+					// Define the TextLayout parameters
+					TextLayout textLayout = new TextLayout(event.display);
+					textLayout.setAscent(event.ascent);
+					textLayout.setDescent(event.descent);
+					textLayout.setFont(event.style.font);
+					// Create the String (">>> ") at the beginning of each input
+					// line
+					textLayout.setText(">>> ");
+					// Draw the text
+					textLayout.draw(event.gc, event.x, event.y);
+					textLayout.dispose();
+				}
 			}
 		});
 	}
-
 }

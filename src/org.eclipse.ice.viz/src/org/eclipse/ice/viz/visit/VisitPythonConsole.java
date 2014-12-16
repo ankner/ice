@@ -12,12 +12,15 @@
  *******************************************************************************/
 package org.eclipse.ice.viz.visit;
 
+import java.io.IOException;
+
 import gov.lbnl.visit.swt.VisItSwtWidget;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.console.IConsole;
 import org.eclipse.ui.console.IConsoleView;
 import org.eclipse.ui.console.IOConsole;
+import org.eclipse.ui.console.IOConsoleOutputStream;
 import org.eclipse.ui.part.IPageBookViewPage;
 
 /**
@@ -30,6 +33,12 @@ public class VisitPythonConsole extends IOConsole {
 	 * The {@link VisItSwtWidget} for which this console provides an interface.
 	 */
 	private VisItSwtWidget visitWidget;
+
+	/**
+	 * A flag to identify whether or not the console is accepting input
+	 * commands.
+	 */
+	private boolean isInput;
 
 	/**
 	 * The constructor
@@ -50,6 +59,8 @@ public class VisitPythonConsole extends IOConsole {
 		super(name, imageDescriptor);
 		// Set the VisIt widget
 		visitWidget = vizWidget;
+		// Set the input flag default to allowing input
+		isInput = true;
 	}
 
 	/**
@@ -77,5 +88,45 @@ public class VisitPythonConsole extends IOConsole {
 		}
 
 		return;
+	}
+
+	/**
+	 * Print the String ">>> " to indicate that the console is ready for input.
+	 */
+	public void writeInPrompt() {
+		try {
+			// Initiate an output stream to write to the console
+			IOConsoleOutputStream outStream = newOutputStream();
+			outStream.setActivateOnWrite(true);
+			// Write ">>> " to the console
+			outStream.write(">>> ");
+			// Move the cursor to the end of the printed text
+			// Close the output stream we are done using
+			outStream.close();
+		} catch (IOException e) {
+			System.out.println("VisitPythonConsole Message: "
+					+ "IOConsoleOutputStream error.");
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Set the value of the flag to indicate whether or not the console is
+	 * accepting input.
+	 * 
+	 * @param value
+	 *            The boolean value to set the flag to
+	 */
+	public void setIsInput(boolean value) {
+		isInput = value;
+	}
+
+	/**
+	 * Retrieve the flag for whether or not the console is accepting input.
+	 * 
+	 * @return The value of the {@link isInput} field
+	 */
+	public boolean isInput() {
+		return isInput;
 	}
 }
