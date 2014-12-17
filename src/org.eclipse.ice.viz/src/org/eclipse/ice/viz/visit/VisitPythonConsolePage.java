@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.ice.viz.visit;
 
+import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.console.IConsoleView;
 import org.eclipse.ui.console.TextConsole;
@@ -19,6 +20,10 @@ import org.eclipse.ui.console.TextConsolePage;
 import org.eclipse.ui.console.TextConsoleViewer;
 
 /**
+ * This {@link TextConsolePage} subclass is simply being used to access the
+ * {@link VisitPythonConsoleViewer} which is a subclass that has access to the
+ * {@link StyledText} of the console.
+ * 
  * @author Taylor Patterson
  *
  */

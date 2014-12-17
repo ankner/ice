@@ -24,6 +24,9 @@ import org.eclipse.ui.console.IOConsoleOutputStream;
 import org.eclipse.ui.part.IPageBookViewPage;
 
 /**
+ * This {@link IOConsole} subclass provides an mechanism for executing methods
+ * from the VisIt Python API.
+ * 
  * @author Taylor Patterson
  * 
  */
@@ -33,12 +36,6 @@ public class VisitPythonConsole extends IOConsole {
 	 * The {@link VisItSwtWidget} for which this console provides an interface.
 	 */
 	private VisItSwtWidget visitWidget;
-
-	/**
-	 * A flag to identify whether or not the console is accepting input
-	 * commands.
-	 */
-	private boolean isInput;
 
 	/**
 	 * The constructor
@@ -59,8 +56,6 @@ public class VisitPythonConsole extends IOConsole {
 		super(name, imageDescriptor);
 		// Set the VisIt widget
 		visitWidget = vizWidget;
-		// Set the input flag default to allowing input
-		isInput = true;
 	}
 
 	/**
@@ -108,25 +103,5 @@ public class VisitPythonConsole extends IOConsole {
 					+ "IOConsoleOutputStream error.");
 			e.printStackTrace();
 		}
-	}
-
-	/**
-	 * Set the value of the flag to indicate whether or not the console is
-	 * accepting input.
-	 * 
-	 * @param value
-	 *            The boolean value to set the flag to
-	 */
-	public void setIsInput(boolean value) {
-		isInput = value;
-	}
-
-	/**
-	 * Retrieve the flag for whether or not the console is accepting input.
-	 * 
-	 * @return The value of the {@link isInput} field
-	 */
-	public boolean isInput() {
-		return isInput;
 	}
 }

@@ -20,7 +20,6 @@ import org.eclipse.swt.custom.PaintObjectListener;
 import org.eclipse.swt.custom.ST;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
-import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.graphics.GlyphMetrics;
 import org.eclipse.swt.graphics.TextLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -28,6 +27,10 @@ import org.eclipse.ui.console.TextConsole;
 import org.eclipse.ui.console.TextConsoleViewer;
 
 /**
+ * This {@link TextConsoleViewer} subclass is leveraged to get a handle on the
+ * {@link StyledText} of the console to apply some formatting to the text
+ * printed there.
+ * 
  * @author Taylor Patterson
  *
  */
@@ -71,20 +74,17 @@ public class VisitPythonConsoleViewer extends TextConsoleViewer {
 
 			@Override
 			public void paintObject(PaintObjectEvent event) {
-				// Only print if this is an input line
-				if (((VisitPythonConsole) console).isInput()) {
-					// Define the TextLayout parameters
-					TextLayout textLayout = new TextLayout(event.display);
-					textLayout.setAscent(event.ascent);
-					textLayout.setDescent(event.descent);
-					textLayout.setFont(event.style.font);
-					// Create the String (">>> ") at the beginning of each input
-					// line
-					textLayout.setText(">>> ");
-					// Draw the text
-					textLayout.draw(event.gc, event.x, event.y);
-					textLayout.dispose();
-				}
+				// Define the TextLayout parameters
+				TextLayout textLayout = new TextLayout(event.display);
+				textLayout.setAscent(event.ascent);
+				textLayout.setDescent(event.descent);
+				textLayout.setFont(event.style.font);
+				// Create the String (">>> ") at the beginning of each input
+				// line
+				textLayout.setText(">>> ");
+				// Draw the text
+				textLayout.draw(event.gc, event.x, event.y);
+				textLayout.dispose();
 			}
 		});
 	}

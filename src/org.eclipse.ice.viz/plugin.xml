@@ -140,6 +140,16 @@
             </command>
          </toolbar>
       </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="toolbar:org.eclipse.ui.console.ConsoleView">
+            <command
+                  commandId="org.eclipse.ice.viz.visit.LoadPythonScript"
+                  id="Load Python Script Command"
+                  icon="icons/launch.png"
+                  style="push">
+            </command>
+      </menuContribution>
    </extension>
    <extension
          point="org.eclipse.ui.commands">
@@ -147,6 +157,11 @@
             defaultHandler="org.eclipse.ice.viz.visit.LaunchVisitHandler"
             id="org.eclipse.ice.viz.LaunchVisitCommand"
             name="Launch VisIt">
+      </command>
+      <command
+            defaultHandler="org.eclipse.ice.viz.visit.LoadPythonScriptHandler"
+            id="org.eclipse.ice.viz.visit.LoadPythonScript"
+            name="Load Python Script">
       </command>
    </extension>
 </plugin>

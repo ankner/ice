@@ -1,3 +1,15 @@
+/*******************************************************************************
+ * Copyright (c) 2014 UT-Battelle, LLC.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *   Initial API and implementation and/or initial documentation - Jay Jay Billings,
+ *   Jordan H. Deyton, Dasha Gorin, Alexander J. McCaskey, Taylor Patterson,
+ *   Claire Saunders, Matthew Wang, Anna Wojtowicz
+ *******************************************************************************/
 package org.eclipse.ice.viz.visit;
 
 import java.io.IOException;
@@ -23,6 +35,10 @@ import visit.java.client.AttributeSubject;
 import visit.java.client.AttributeSubject.AttributeSubjectCallback;
 
 /**
+ * This {@link IConsoleFactory} subclass creates {@link VisitPythonConsole}
+ * instances. This class manages the capture of user input and outputs text
+ * returned by VisIt.
+ * 
  * @author Taylor Patterson
  *
  */
@@ -151,8 +167,6 @@ public class VisitPythonConsoleFactory implements IConsoleFactory {
 					@Override
 					public void run() {
 						try {
-							// Prepare for output
-							console.setIsInput(false);
 							// Initiate an output stream to write callback
 							// contents to the console
 							IOConsoleOutputStream outStream = console
@@ -164,8 +178,6 @@ public class VisitPythonConsoleFactory implements IConsoleFactory {
 							}
 							// Close the output stream we are done using
 							outStream.close();
-							// Prepare for input
-							console.setIsInput(true);
 						} catch (IOException e) {
 							System.out.println("VisitPythonConsoleFactory "
 									+ "Message: IOConsoleOutputStream error.");
