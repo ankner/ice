@@ -117,11 +117,6 @@ public class VisitPlotViewer extends ViewPart implements
 	private DeletePlotAction deletePlotAction;
 
 	/**
-	 * This action calls a new dialog to pop open a Python command line console.
-	 */
-	private LaunchPythonScriptDialogAction pythonCLIAction;
-
-	/**
 	 * The TimeSliderWidget that provides controls to allow the user to step
 	 * through time-dependent data contained in a single plot.
 	 */
@@ -368,10 +363,6 @@ public class VisitPlotViewer extends ViewPart implements
 		addPlotAction = new AddVisitPlotAction(this);
 		toolBarManager.add(addPlotAction);
 		addPlotAction.setEnabled(resource != null);
-
-		// Create the button for selecting and executing a Python script
-		pythonCLIAction = new LaunchPythonScriptDialogAction(this);
-		toolBarManager.add(pythonCLIAction);
 
 		return;
 	}
