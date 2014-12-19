@@ -32,12 +32,23 @@ import org.eclipse.ui.console.IOConsoleOutputStream;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 /**
+ * This class handles the execution of a VisIt Python script loaded from a file.
+ * Upon a user selection of the "Load Python Script" button in the console
+ * toolbar with an initialized VisIt connection, the user is presented with a
+ * {@link FileDialog} to select a previously create Python file to be executed
+ * in the VisIt Python Interface console.
+ * 
  * @author Taylor Patterson
  *
  */
 public class LoadPythonScriptHandler extends AbstractHandler {
 
 	/**
+	 * This method is called whenever the user selects the "Load Python Script"
+	 * button in the console toolbar. If a VisIt connection has not been
+	 * established, the user is presented with an error dialog. Otherwise, the
+	 * user is presented with a FileDialog to select a Python script to execute.
+	 * 
 	 * @see org.eclipse.core.commands.IHandler#execute(org.eclipse.core.commands.ExecutionEvent)
 	 */
 	@Override
