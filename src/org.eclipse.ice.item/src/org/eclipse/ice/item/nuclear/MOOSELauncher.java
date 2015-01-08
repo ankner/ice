@@ -94,6 +94,7 @@ public class MOOSELauncher extends SuiteLauncher implements IUpdateableListener 
 		executables.add("RELAP-7");
 		executables.add("RAVEN");
 		executables.add("MOOSE_TEST");
+		
 		executables.add("PUMA");
 
 		// executables.add(yamlSyntaxGenerator);
