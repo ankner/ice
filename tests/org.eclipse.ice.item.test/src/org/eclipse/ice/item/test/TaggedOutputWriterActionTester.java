@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2014 UT-Battelle, LLC.
+ * Copyright (c) 2012, 2014- UT-Battelle, LLC.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -26,36 +26,18 @@ import org.eclipse.ice.datastructures.form.FormStatus;
 import org.eclipse.ice.item.action.TaggedOutputWriterAction;
 
 /**
- * <!-- begin-UML-doc -->
- * <p>
  * This class is responsible for checking that the TaggedOutputWriter action can
  * write a set of key-value pairs to an output file.
- * </p>
- * <!-- end-UML-doc -->
  * 
  * @author Jay Jay Billings
- * @generated 
- *            "UML to Java (com.ibm.xtools.transform.uml2.java5.internal.UML2JavaTransform)"
  */
 public class TaggedOutputWriterActionTester {
-	/**
-	 * <!-- begin-UML-doc --> <!-- end-UML-doc -->
-	 * 
-	 * @generated 
-	 *            "UML to Java (com.ibm.xtools.transform.uml2.java5.internal.UML2JavaTransform)"
-	 */
+
 	private TaggedOutputWriterAction taggedOutputWriterAction;
 
 	/**
-	 * <!-- begin-UML-doc -->
-	 * <p>
 	 * This operation checks that the TaggedOutputWriter action can write a set
 	 * of key-value pairs to an output file.
-	 * </p>
-	 * <!-- end-UML-doc -->
-	 * 
-	 * @generated 
-	 *            "UML to Java (com.ibm.xtools.transform.uml2.java5.internal.UML2JavaTransform)"
 	 */
 	@Test
 	public void checkWriting() {
@@ -90,6 +72,7 @@ public class TaggedOutputWriterActionTester {
 		File testFile = new File("taggedTestFile.txt");
 		assertTrue(testFile.exists());
 		assertTrue(testFile.canRead());
+		testFile.deleteOnExit();
 
 		// Load the file and check it
 		Properties testFileProperties = new Properties();
@@ -117,13 +100,6 @@ public class TaggedOutputWriterActionTester {
 		assertEquals(testFileProperties.get("Scotty"),
 				testDictionary.get("Scotty"));
 
-		// Get rid of the file if everything worked
-		if (testFile.exists()) {
-			testFile.delete();
-		}
-
 		return;
-
-		// end-user-code
 	}
 }
